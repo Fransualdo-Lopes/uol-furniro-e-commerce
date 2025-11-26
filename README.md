@@ -41,7 +41,7 @@ Designed for clean UI/UX, fast performance, and a realistic online-store experie
 git clone https://github.com/Fransualdo-Lopes/uol-furniro-e-commerce.git
 
 # Enter the project folder
-cd furniro-e-commerce
+cd uol-furniro-e-commerce
 
 # Install dependencies
 npm install
