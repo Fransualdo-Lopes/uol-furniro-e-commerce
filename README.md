@@ -2,36 +2,50 @@
 
 This project was proposed as the second challenge during my Full Stack internship at Compass Uol.
 
-A fully responsive and modern e-commerce frontend project built with React + TypeScript + Vite.
+A fully responsive and modern e-commerce frontend project built with **React + TypeScript + Vite**.  
 Designed for clean UI/UX, fast performance, and a realistic online-store experience.
 
-📌 See the live version:
+📌 **Live Demo:**  
 👉 https://uol-furniro-e-commerce.vercel.app/
 
-📦 Features
+---
 
-🛍️ Product listing with clean grid layout
+## 📦 Features
 
-🔍 Product details page
+- 🛍️ Product listing with organized grid layout  
+- 🔍 Product details page  
+- 🧭 Smooth and intuitive navigation  
+- ⚡ Powered by **React + TypeScript + Vite**  
+- 📱 Fully responsive (mobile, tablet, desktop)  
+- 🎨 Clean and modern UI following marketplace standards  
+- 🌐 Easily deployable on Vercel, Netlify, GitHub Pages, etc.  
 
-🧭 Smooth and intuitive navigation
+---
 
-⚡ Built with React + TypeScript + Vite
+## 🛠️ Tech Stack
 
-📱 Fully responsive (mobile, tablet, desktop)
+- **React**
+- **TypeScript**
+- **Vite**
+- **CSS Modules / Styled Components**
+- **Node.js** (for development)
 
-🎨 Beautiful and modern UI following marketplace standards
+---
 
-🌐 Ready for deployment on Vercel, Netlify, or any static hosting
+## 🚀 Run Locally
 
-🛠️ Tech Stack
+**Prerequisites:** Node.js installed.
 
-React
+```bash
+# Clone the project
+git clone https://github.com/SEU-USUARIO/furniro-e-commerce.git
 
-TypeScript
+# Enter the project folder
+cd furniro-e-commerce
 
-Vite
+# Install dependencies
+npm install
 
-CSS Modules / Styled Components (dependendo do seu projeto)
+# Run the development server
+npm run dev
 
-Node.js (for local development)
