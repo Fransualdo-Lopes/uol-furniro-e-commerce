@@ -26,6 +26,7 @@ export const PRODUCTS: Product[] = [
     price: 2500000,
     originalPrice: 3500000,
     image: 'https://images.unsplash.com/photo-1592078615290-033ee584e267?q=80&w=800&auto=format&fit=crop',
+    category: 'Dining',
     tag: { type: 'discount', value: '-30%' }
   },
   {
@@ -34,6 +35,7 @@ export const PRODUCTS: Product[] = [
     description: 'Stylish cafe chair',
     price: 2500000,
     image: 'https://images.unsplash.com/photo-1503602642458-232111445657?q=80&w=800&auto=format&fit=crop',
+    category: 'Dining'
   },
   {
     id: '3',
@@ -42,6 +44,7 @@ export const PRODUCTS: Product[] = [
     price: 7000000,
     originalPrice: 14000000,
     image: 'https://images.unsplash.com/photo-1555041469-a586c61ea9bc?q=80&w=800&auto=format&fit=crop',
+    category: 'Living',
     tag: { type: 'discount', value: '-50%' }
   },
   {
@@ -50,6 +53,7 @@ export const PRODUCTS: Product[] = [
     description: 'Outdoor bar table and stool',
     price: 500000,
     image: 'https://images.unsplash.com/photo-1595515106969-1ce29566ff1c?q=80&w=800&auto=format&fit=crop',
+    category: 'Living',
     tag: { type: 'new', value: 'New' }
   },
   {
@@ -58,6 +62,7 @@ export const PRODUCTS: Product[] = [
     description: 'Night lamp',
     price: 1500000,
     image: 'https://images.unsplash.com/photo-1507473885765-e6ed057f782c?q=80&w=800&auto=format&fit=crop',
+    category: 'Living'
   },
   {
     id: '6',
@@ -65,6 +70,7 @@ export const PRODUCTS: Product[] = [
     description: 'Small mug',
     price: 150000,
     image: 'https://images.unsplash.com/photo-1584271854089-9bb3e5168e32?q=80&w=800&auto=format&fit=crop',
+    category: 'Dining',
     tag: { type: 'new', value: 'New' }
   },
   {
@@ -74,6 +80,7 @@ export const PRODUCTS: Product[] = [
     price: 7000000,
     originalPrice: 14000000,
     image: 'https://images.unsplash.com/photo-1617325247661-675ab4b64ae2?q=80&w=800&auto=format&fit=crop',
+    category: 'Bedroom',
     tag: { type: 'discount', value: '-50%' }
   },
   {
@@ -82,6 +89,7 @@ export const PRODUCTS: Product[] = [
     description: 'Minimalist flower pot',
     price: 500000,
     image: 'https://images.unsplash.com/photo-1485955900006-10f4d324d411?q=80&w=800&auto=format&fit=crop',
+    category: 'Living',
     tag: { type: 'new', value: 'New' }
   }
 ];

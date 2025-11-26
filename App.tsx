@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -21,14 +20,22 @@ const App: React.FC = () => {
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // State for filtering shop by category
+  const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
 
   const navigateToHome = () => {
     setCurrentView('home');
+    setSelectedCategory(null); // Reset filter when going home
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const navigateToShop = () => {
     setCurrentView('shop');
+    // We don't necessarily reset category here if they clicked "Show More", 
+    // but typically "Shop" in menu implies "All Products" unless a filter is active.
+    // Let's reset it for a clean "Shop" click, but preserve it if navigating internally.
+    // For simple menu clicks, we reset.
+    setSelectedCategory(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -45,6 +52,12 @@ const App: React.FC = () => {
   const navigateToProduct = (product: Product) => {
     setSelectedProduct(product);
     setCurrentView('product');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleCategoryClick = (categoryName: string) => {
+    setSelectedCategory(categoryName);
+    setCurrentView('shop');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -132,7 +145,7 @@ const App: React.FC = () => {
         {currentView === 'home' && (
           <>
             <Hero />
-            <CategorySection />
+            <CategorySection onCategoryClick={handleCategoryClick} />
             <ProductGrid 
               onShowMoreClick={navigateToShop} 
               onProductClick={navigateToProduct}
@@ -141,7 +154,11 @@ const App: React.FC = () => {
         )}
         
         {currentView === 'shop' && (
-          <Shop onProductClick={navigateToProduct} />
+          <Shop 
+            onProductClick={navigateToProduct} 
+            activeCategory={selectedCategory}
+            onClearCategory={() => setSelectedCategory(null)}
+          />
         )}
 
         {currentView === 'about' && (

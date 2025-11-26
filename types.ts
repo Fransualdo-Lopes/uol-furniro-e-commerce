@@ -5,6 +5,7 @@ export interface Product {
   price: number;
   originalPrice?: number;
   image: string;
+  category?: string; // Added category field
   tag?: {
     type: 'discount' | 'new';
     value: string;
