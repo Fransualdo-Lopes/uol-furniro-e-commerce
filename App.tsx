@@ -158,6 +158,7 @@ const App: React.FC = () => {
             onProductClick={navigateToProduct} 
             activeCategory={selectedCategory}
             onClearCategory={() => setSelectedCategory(null)}
+            onSelectCategory={handleCategoryClick}
           />
         )}
 
