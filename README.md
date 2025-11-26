@@ -1,20 +1,35 @@
-<div align="center">
-<!-- <img width="1200" height="475" alt="Banner" src="url-exemplo" /> -->
-</div>
+🛒 Furniro – Modern E-commerce Website
 
-# See my project in real time at the link below:
-`https://uol-furniro-e-commerce.vercel.app/`
+A fully responsive and modern e-commerce frontend project built with React + TypeScript + Vite.
+Designed for clean UI/UX, fast performance, and a realistic online-store experience.
 
-# Run and deploy in your plataform develoment
+📌 See the live version:
+👉 https://uol-furniro-e-commerce.vercel.app/
 
-This contains everything you need to run your app locally.
+📦 Features
 
-## Run Locally
+🛍️ Product listing with clean grid layout
 
-**Prerequisites:**  Node.js
+🔍 Product details page
 
+🧭 Smooth and intuitive navigation
 
-1. Install dependencies:
-   `npm install`
-3. Run the app:
-   `npm run dev`
+⚡ Built with React + TypeScript + Vite
+
+📱 Fully responsive (mobile, tablet, desktop)
+
+🎨 Beautiful and modern UI following marketplace standards
+
+🌐 Ready for deployment on Vercel, Netlify, or any static hosting
+
+🛠️ Tech Stack
+
+React
+
+TypeScript
+
+Vite
+
+CSS Modules / Styled Components (dependendo do seu projeto)
+
+Node.js (for local development)
