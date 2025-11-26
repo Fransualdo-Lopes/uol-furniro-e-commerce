@@ -1,5 +1,6 @@
+
 import React, { useEffect, useState, useMemo } from 'react';
-import { SlidersHorizontal, Grid, List, ChevronRight, X, ChevronDown } from 'lucide-react';
+import { SlidersHorizontal, Grid, List, ChevronRight, X, ChevronDown, Search } from 'lucide-react';
 import ProductCard from './ProductCard';
 import { PRODUCTS, CATEGORIES } from '../constants';
 import { Product } from '../types';
@@ -7,13 +8,14 @@ import { Product } from '../types';
 interface ShopProps {
   onProductClick: (product: Product) => void;
   activeCategory?: string | null;
+  searchQuery?: string;
   onClearCategory?: () => void;
   onSelectCategory?: (category: string) => void;
 }
 
 type SortOption = 'default' | 'price-asc' | 'price-desc' | 'name-asc';
 
-const Shop: React.FC<ShopProps> = ({ onProductClick, activeCategory, onClearCategory, onSelectCategory }) => {
+const Shop: React.FC<ShopProps> = ({ onProductClick, activeCategory, searchQuery, onClearCategory, onSelectCategory }) => {
   // Config States
   const [itemsPerPage, setItemsPerPage] = useState<number>(16);
   const [sortBy, setSortBy] = useState<SortOption>('default');
@@ -24,10 +26,11 @@ const Shop: React.FC<ShopProps> = ({ onProductClick, activeCategory, onClearCate
   // Logic: 
   // 1. Prepare Data (Simulate larger dataset by repeating)
   // 2. Filter by Category
-  // 3. Sort
-  // 4. Paginate
+  // 3. Filter by Search Query
+  // 4. Sort
+  // 5. Paginate
 
-  // 1. Prepare Data Source & 2. Filter
+  // 1, 2 & 3. Prepare Data Source & Filter
   const filteredData = useMemo(() => {
     let baseData = PRODUCTS;
     
@@ -35,12 +38,21 @@ const Shop: React.FC<ShopProps> = ({ onProductClick, activeCategory, onClearCate
     baseData = [...PRODUCTS, ...PRODUCTS, ...PRODUCTS, ...PRODUCTS];
 
     if (activeCategory) {
-      return baseData.filter(p => p.category === activeCategory);
+      baseData = baseData.filter(p => p.category === activeCategory);
     }
-    return baseData;
-  }, [activeCategory]);
 
-  // 3. Sort
+    if (searchQuery) {
+      const lowerQuery = searchQuery.toLowerCase();
+      baseData = baseData.filter(p => 
+        p.name.toLowerCase().includes(lowerQuery) || 
+        p.description.toLowerCase().includes(lowerQuery)
+      );
+    }
+
+    return baseData;
+  }, [activeCategory, searchQuery]);
+
+  // 4. Sort
   const sortedData = useMemo(() => {
     const data = [...filteredData];
     switch (sortBy) {
@@ -55,7 +67,7 @@ const Shop: React.FC<ShopProps> = ({ onProductClick, activeCategory, onClearCate
     }
   }, [filteredData, sortBy]);
 
-  // 4. Paginate
+  // 5. Paginate
   const totalItems = sortedData.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   
@@ -85,10 +97,10 @@ const Shop: React.FC<ShopProps> = ({ onProductClick, activeCategory, onClearCate
     }
   };
 
-  // Reset page when category changes
+  // Reset page when category or search changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeCategory]);
+  }, [activeCategory, searchQuery]);
 
   return (
     <div className="w-full relative">
@@ -170,7 +182,7 @@ const Shop: React.FC<ShopProps> = ({ onProductClick, activeCategory, onClearCate
           <div className="hidden md:block w-[2px] h-[37px] bg-[#9F9F9F]"></div>
 
           <span className="text-base text-black">
-            Showing {(currentPage - 1) * itemsPerPage + 1}–{Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems} results
+            Showing {Math.min((currentPage - 1) * itemsPerPage + 1, totalItems)}–{Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems} results
           </span>
         </div>
 
@@ -208,16 +220,28 @@ const Shop: React.FC<ShopProps> = ({ onProductClick, activeCategory, onClearCate
       </div>
 
       {/* Active Filter Indicator */}
-      {activeCategory && (
+      {(activeCategory || searchQuery) && (
         <div className="max-w-[1280px] mx-auto px-4 md:px-8 lg:px-16 pt-8">
-           <div className="flex items-center gap-2">
+           <div className="flex items-center gap-2 flex-wrap">
              <span className="text-lg text-gray-500">Filtered by:</span>
-             <span className="bg-[#B88E2F] text-white px-4 py-1 rounded-full flex items-center gap-2 text-sm font-medium animate-fadeIn">
-               {activeCategory}
-               <button onClick={onClearCategory} className="hover:bg-black/20 rounded-full p-0.5">
-                 <X size={14} />
-               </button>
-             </span>
+             
+             {activeCategory && (
+                <span className="bg-[#B88E2F] text-white px-4 py-1 rounded-full flex items-center gap-2 text-sm font-medium animate-fadeIn">
+                  {activeCategory}
+                  <button onClick={onClearCategory} className="hover:bg-black/20 rounded-full p-0.5">
+                    <X size={14} />
+                  </button>
+                </span>
+             )}
+
+             {searchQuery && (
+                <span className="bg-[#B88E2F] text-white px-4 py-1 rounded-full flex items-center gap-2 text-sm font-medium animate-fadeIn">
+                  Search: "{searchQuery}"
+                  <button onClick={onClearCategory} className="hover:bg-black/20 rounded-full p-0.5">
+                    <X size={14} />
+                  </button>
+                </span>
+             )}
            </div>
         </div>
       )}
@@ -239,8 +263,12 @@ const Shop: React.FC<ShopProps> = ({ onProductClick, activeCategory, onClearCate
             ))}
           </div>
         ) : (
-          <div className="text-center py-20 text-gray-500 text-xl">
-            No products found matching your criteria.
+          <div className="text-center py-20">
+             <div className="flex justify-center mb-4 text-[#9F9F9F]">
+                <Search size={48} />
+             </div>
+             <p className="text-gray-500 text-xl font-medium">No products found matching your criteria.</p>
+             <p className="text-gray-400 mt-2">Try checking your spelling or use different keywords.</p>
           </div>
         )}
 

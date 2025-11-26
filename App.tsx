@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -22,20 +23,21 @@ const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   // State for filtering shop by category
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  // State for search
+  const [searchQuery, setSearchQuery] = useState<string>('');
 
   const navigateToHome = () => {
     setCurrentView('home');
     setSelectedCategory(null); // Reset filter when going home
+    setSearchQuery('');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const navigateToShop = () => {
     setCurrentView('shop');
-    // We don't necessarily reset category here if they clicked "Show More", 
-    // but typically "Shop" in menu implies "All Products" unless a filter is active.
-    // Let's reset it for a clean "Shop" click, but preserve it if navigating internally.
-    // For simple menu clicks, we reset.
+    // We reset search and category for a clean shop visit unless triggered by specific handlers
     setSelectedCategory(null);
+    setSearchQuery('');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -57,6 +59,14 @@ const App: React.FC = () => {
 
   const handleCategoryClick = (categoryName: string) => {
     setSelectedCategory(categoryName);
+    setSearchQuery(''); // Clear search if selecting a category
+    setCurrentView('shop');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    setSelectedCategory(null); // Clear category filter to search global
     setCurrentView('shop');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -122,6 +132,7 @@ const App: React.FC = () => {
         onContactClick={navigateToContact}
         onCartIconClick={() => setIsCartOpen(true)}
         onUserIconClick={handleUserIconClick}
+        onSearch={handleSearch}
         cartCount={cartCount}
         isLoggedIn={isLoggedIn}
       />
@@ -157,7 +168,11 @@ const App: React.FC = () => {
           <Shop 
             onProductClick={navigateToProduct} 
             activeCategory={selectedCategory}
-            onClearCategory={() => setSelectedCategory(null)}
+            searchQuery={searchQuery}
+            onClearCategory={() => {
+              setSelectedCategory(null);
+              setSearchQuery('');
+            }}
             onSelectCategory={handleCategoryClick}
           />
         )}
