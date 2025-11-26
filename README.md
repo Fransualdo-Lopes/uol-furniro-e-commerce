@@ -1,5 +1,7 @@
 🛒 Furniro – Modern E-commerce Website
 
+This project was proposed as the second challenge during my Full Stack internship at Compass Uol.
+
 A fully responsive and modern e-commerce frontend project built with React + TypeScript + Vite.
 Designed for clean UI/UX, fast performance, and a realistic online-store experience.
 
