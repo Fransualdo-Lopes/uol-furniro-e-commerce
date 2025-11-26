@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { User, Search, Heart, ShoppingCart, Menu, X } from 'lucide-react';
+import { User, Search, Heart, ShoppingCart, Menu } from 'lucide-react';
 
 interface NavbarProps {
   onHomeClick: () => void;
