@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { ChevronRight, Star, Facebook, Linkedin, Twitter, Minus, Plus } from 'lucide-react';
+import { ChevronRight, Star, Facebook, Linkedin, Twitter, Minus, Plus, ArrowRightLeft } from 'lucide-react';
 import { Product } from '../types';
 import { PRODUCTS } from '../constants';
 import ProductCard from './ProductCard';
@@ -11,9 +11,17 @@ interface ProductDetailsProps {
   onShopClick: () => void;
   onProductClick: (product: Product) => void;
   onAddToCart: (product: Product, quantity: number) => void;
+  onCompareClick: (product: Product) => void;
 }
 
-const ProductDetails: React.FC<ProductDetailsProps> = ({ product, onHomeClick, onShopClick, onProductClick, onAddToCart }) => {
+const ProductDetails: React.FC<ProductDetailsProps> = ({ 
+  product, 
+  onHomeClick, 
+  onShopClick, 
+  onProductClick, 
+  onAddToCart,
+  onCompareClick
+}) => {
   // Mock data for internal view logic
   const [quantity, setQuantity] = React.useState(1);
   const [selectedSize, setSelectedSize] = React.useState('L');
@@ -159,8 +167,11 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, onHomeClick, o
               </button>
 
               {/* Compare */}
-              <button className="border border-black rounded-[15px] px-10 h-[64px] text-[20px] font-normal flex items-center gap-2 hover:bg-black hover:text-white transition-colors">
-                <Plus size={20} /> Compare
+              <button 
+                onClick={() => onCompareClick(product)}
+                className="border border-black rounded-[15px] px-10 h-[64px] text-[20px] font-normal flex items-center gap-2 hover:bg-black hover:text-white transition-colors"
+              >
+                <ArrowRightLeft size={20} /> Compare
               </button>
             </div>
 
@@ -218,7 +229,12 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({ product, onHomeClick, o
         <h2 className="text-[#3A3A3A] text-4xl font-medium text-center mb-12">Related Products</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8">
           {relatedProducts.map((p) => (
-             <ProductCard key={p.id} product={p} onSeeDetails={onProductClick} />
+             <ProductCard 
+               key={p.id} 
+               product={p} 
+               onSeeDetails={onProductClick}
+               onCompareClick={() => onCompareClick(p)}
+             />
           ))}
         </div>
         <div className="flex justify-center mt-12">

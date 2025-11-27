@@ -11,6 +11,7 @@ interface ShopProps {
   onClearCategory?: () => void;
   onSelectCategory?: (category: string) => void;
   searchQuery?: string;
+  onCompareClick: (product: Product) => void;
 }
 
 type SortOption = 'default' | 'price-asc' | 'price-desc' | 'name-asc';
@@ -20,7 +21,8 @@ const Shop: React.FC<ShopProps> = ({
   activeCategory, 
   onClearCategory, 
   onSelectCategory, 
-  searchQuery = '' 
+  searchQuery = '',
+  onCompareClick
 }) => {
   // Config States
   const [itemsPerPage, setItemsPerPage] = useState<number>(16);
@@ -262,6 +264,7 @@ const Shop: React.FC<ShopProps> = ({
                 key={`${product.id}-${index}`} 
                 product={product} 
                 onSeeDetails={onProductClick}
+                onCompareClick={() => onCompareClick(product)}
               />
             ))}
           </div>

@@ -6,9 +6,10 @@ import { Product } from '../types';
 interface ProductCardProps {
   product: Product;
   onSeeDetails?: (product: Product) => void;
+  onCompareClick?: (product: Product) => void;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onSeeDetails }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ product, onSeeDetails, onCompareClick }) => {
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(price);
   };
@@ -16,6 +17,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSeeDetails }) => {
   const handleDetailsClick = () => {
     if (onSeeDetails) {
       onSeeDetails(product);
+    }
+  };
+
+  const handleCompareClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onCompareClick) {
+      onCompareClick(product);
     }
   };
 
@@ -66,7 +74,10 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSeeDetails }) => {
            <button className="flex items-center gap-1 hover:text-[#B88E2F] transition-colors">
              <Share2 size={16} /> Share
            </button>
-           <button className="flex items-center gap-1 hover:text-[#B88E2F] transition-colors">
+           <button 
+             onClick={handleCompareClick}
+             className="flex items-center gap-1 hover:text-[#B88E2F] transition-colors"
+           >
              <ArrowRightLeft size={16} /> Compare
            </button>
            <button className="flex items-center gap-1 hover:text-[#B88E2F] transition-colors">

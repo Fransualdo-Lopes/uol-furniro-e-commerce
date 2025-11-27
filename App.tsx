@@ -12,6 +12,7 @@ import About from './components/About';
 import Contact from './components/Contact';
 import CartSidebar from './components/CartSidebar';
 import LoginModal from './components/LoginModal';
+import ComparisonModal from './components/ComparisonModal';
 import { Product, CartItem } from './types';
 
 const App: React.FC = () => {
@@ -20,7 +21,11 @@ const App: React.FC = () => {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
+  const [isComparisonOpen, setIsComparisonOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  // State for comparison
+  const [comparisonItems, setComparisonItems] = useState<Product[]>([]);
+  
   // State for filtering shop by category
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   // State for search query
@@ -125,6 +130,29 @@ const App: React.FC = () => {
     }
   };
 
+  // Comparison Logic
+  const handleAddToCompare = (product: Product) => {
+    setComparisonItems(prev => {
+      // Check if already in comparison
+      if (prev.find(item => item.id === product.id)) {
+        setIsComparisonOpen(true);
+        return prev;
+      }
+      // Limit to 4 items
+      if (prev.length >= 4) {
+        alert("You can compare up to 4 products only.");
+        setIsComparisonOpen(true);
+        return prev;
+      }
+      setIsComparisonOpen(true);
+      return [...prev, product];
+    });
+  };
+
+  const handleRemoveFromCompare = (productId: string) => {
+    setComparisonItems(prev => prev.filter(item => item.id !== productId));
+  };
+
   // Calculate total number of items for the badge
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
 
@@ -156,6 +184,14 @@ const App: React.FC = () => {
         onClose={() => setIsLoginModalOpen(false)}
         onLogin={handleLogin}
       />
+
+      <ComparisonModal 
+        isOpen={isComparisonOpen}
+        onClose={() => setIsComparisonOpen(false)}
+        products={comparisonItems}
+        onRemoveProduct={handleRemoveFromCompare}
+        onAddToCart={(p) => handleAddToCart(p, 1)}
+      />
       
       {/* Add padding-top to account for fixed navbar height (80px) */}
       <main className="pt-[80px]">
@@ -166,6 +202,7 @@ const App: React.FC = () => {
             <ProductGrid 
               onShowMoreClick={navigateToShop} 
               onProductClick={navigateToProduct}
+              onCompareClick={handleAddToCompare}
             />
           </>
         )}
@@ -177,6 +214,7 @@ const App: React.FC = () => {
             onClearCategory={() => setSelectedCategory(null)}
             onSelectCategory={handleCategoryClick}
             searchQuery={searchQuery}
+            onCompareClick={handleAddToCompare}
           />
         )}
 
@@ -195,6 +233,7 @@ const App: React.FC = () => {
             onShopClick={navigateToShop}
             onProductClick={navigateToProduct}
             onAddToCart={handleAddToCart}
+            onCompareClick={handleAddToCompare}
           />
         )}
 
