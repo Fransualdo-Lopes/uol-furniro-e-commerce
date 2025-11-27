@@ -117,7 +117,7 @@ const Navbar: React.FC<NavbarProps> = ({
                     <input 
                         type="text"
                         placeholder="Search..."
-                        className="w-full outline-none text-sm text-black"
+                        className="w-full bg-white outline-none text-sm text-black"
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         autoFocus
