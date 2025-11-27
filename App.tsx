@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -22,10 +23,13 @@ const App: React.FC = () => {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   // State for filtering shop by category
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+  // State for search query
+  const [searchQuery, setSearchQuery] = useState('');
 
   const navigateToHome = () => {
     setCurrentView('home');
     setSelectedCategory(null); // Reset filter when going home
+    setSearchQuery('');
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
@@ -61,6 +65,13 @@ const App: React.FC = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleSearch = (query: string) => {
+    setSearchQuery(query);
+    if (query.trim() !== '') {
+      setCurrentView('shop');
+    }
+  };
+
   const handleAddToCart = (product: Product, quantity: number) => {
     setCartItems(prev => {
       const existingItemIndex = prev.findIndex(item => item.product.id === product.id);
@@ -78,6 +89,10 @@ const App: React.FC = () => {
 
   const handleRemoveFromCart = (productId: string) => {
     setCartItems(prev => prev.filter(item => item.product.id !== productId));
+  };
+
+  const handleClearCart = () => {
+    setCartItems([]);
   };
 
   const handleCheckout = () => {
@@ -122,6 +137,7 @@ const App: React.FC = () => {
         onContactClick={navigateToContact}
         onCartIconClick={() => setIsCartOpen(true)}
         onUserIconClick={handleUserIconClick}
+        onSearch={handleSearch}
         cartCount={cartCount}
         isLoggedIn={isLoggedIn}
       />
@@ -132,6 +148,7 @@ const App: React.FC = () => {
         cartItems={cartItems}
         onRemoveItem={handleRemoveFromCart}
         onCheckout={handleCheckout}
+        onClearCart={handleClearCart}
       />
 
       <LoginModal 
@@ -159,6 +176,7 @@ const App: React.FC = () => {
             activeCategory={selectedCategory}
             onClearCategory={() => setSelectedCategory(null)}
             onSelectCategory={handleCategoryClick}
+            searchQuery={searchQuery}
           />
         )}
 

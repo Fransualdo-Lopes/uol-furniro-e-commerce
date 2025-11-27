@@ -9,9 +9,10 @@ interface CartSidebarProps {
   cartItems: CartItem[];
   onRemoveItem: (productId: string) => void;
   onCheckout: () => void;
+  onClearCart: () => void;
 }
 
-const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose, cartItems, onRemoveItem, onCheckout }) => {
+const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose, cartItems, onRemoveItem, onCheckout, onClearCart }) => {
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(price);
   };
@@ -84,10 +85,16 @@ const CartSidebar: React.FC<CartSidebarProps> = ({ isOpen, onClose, cartItems, o
           <div className="w-full h-[1px] bg-[#D9D9D9] mb-6"></div>
 
           <div className="flex gap-4">
-            <button className="flex-1 border border-black rounded-[50px] py-3 text-xs font-normal hover:bg-black hover:text-white transition-colors">
+            <button 
+              onClick={onClearCart}
+              className="flex-1 border border-black rounded-[50px] py-3 text-xs font-normal hover:bg-black hover:text-white transition-colors"
+            >
               Clean
             </button>
-            <button className="flex-1 border border-black rounded-[50px] py-3 text-xs font-normal hover:bg-black hover:text-white transition-colors">
+            <button 
+              onClick={onCheckout}
+              className="flex-1 border border-black rounded-[50px] py-3 text-xs font-normal hover:bg-black hover:text-white transition-colors"
+            >
               Checkout
             </button>
             <button 

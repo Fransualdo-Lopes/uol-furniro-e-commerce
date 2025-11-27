@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState, useMemo } from 'react';
 import { SlidersHorizontal, Grid, List, ChevronRight, X, ChevronDown } from 'lucide-react';
 import ProductCard from './ProductCard';
@@ -9,11 +10,18 @@ interface ShopProps {
   activeCategory?: string | null;
   onClearCategory?: () => void;
   onSelectCategory?: (category: string) => void;
+  searchQuery?: string;
 }
 
 type SortOption = 'default' | 'price-asc' | 'price-desc' | 'name-asc';
 
-const Shop: React.FC<ShopProps> = ({ onProductClick, activeCategory, onClearCategory, onSelectCategory }) => {
+const Shop: React.FC<ShopProps> = ({ 
+  onProductClick, 
+  activeCategory, 
+  onClearCategory, 
+  onSelectCategory, 
+  searchQuery = '' 
+}) => {
   // Config States
   const [itemsPerPage, setItemsPerPage] = useState<number>(16);
   const [sortBy, setSortBy] = useState<SortOption>('default');
@@ -24,8 +32,9 @@ const Shop: React.FC<ShopProps> = ({ onProductClick, activeCategory, onClearCate
   // Logic: 
   // 1. Prepare Data (Simulate larger dataset by repeating)
   // 2. Filter by Category
-  // 3. Sort
-  // 4. Paginate
+  // 3. Filter by Search Query
+  // 4. Sort
+  // 5. Paginate
 
   // 1. Prepare Data Source & 2. Filter
   const filteredData = useMemo(() => {
@@ -34,13 +43,24 @@ const Shop: React.FC<ShopProps> = ({ onProductClick, activeCategory, onClearCate
     // Simulate larger database for pagination demo (4x the products)
     baseData = [...PRODUCTS, ...PRODUCTS, ...PRODUCTS, ...PRODUCTS];
 
+    // Filter by Category
     if (activeCategory) {
-      return baseData.filter(p => p.category === activeCategory);
+      baseData = baseData.filter(p => p.category === activeCategory);
     }
-    return baseData;
-  }, [activeCategory]);
 
-  // 3. Sort
+    // Filter by Search Query
+    if (searchQuery) {
+      const lowerQuery = searchQuery.toLowerCase();
+      baseData = baseData.filter(p => 
+        p.name.toLowerCase().includes(lowerQuery) || 
+        p.description.toLowerCase().includes(lowerQuery)
+      );
+    }
+
+    return baseData;
+  }, [activeCategory, searchQuery]);
+
+  // 4. Sort
   const sortedData = useMemo(() => {
     const data = [...filteredData];
     switch (sortBy) {
@@ -55,7 +75,7 @@ const Shop: React.FC<ShopProps> = ({ onProductClick, activeCategory, onClearCate
     }
   }, [filteredData, sortBy]);
 
-  // 4. Paginate
+  // 5. Paginate
   const totalItems = sortedData.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   
@@ -85,10 +105,10 @@ const Shop: React.FC<ShopProps> = ({ onProductClick, activeCategory, onClearCate
     }
   };
 
-  // Reset page when category changes
+  // Reset page when category or search changes
   useEffect(() => {
     setCurrentPage(1);
-  }, [activeCategory]);
+  }, [activeCategory, searchQuery]);
 
   return (
     <div className="w-full relative">
@@ -208,16 +228,23 @@ const Shop: React.FC<ShopProps> = ({ onProductClick, activeCategory, onClearCate
       </div>
 
       {/* Active Filter Indicator */}
-      {activeCategory && (
+      {(activeCategory || searchQuery) && (
         <div className="max-w-[1280px] mx-auto px-4 md:px-8 lg:px-16 pt-8">
-           <div className="flex items-center gap-2">
+           <div className="flex flex-wrap items-center gap-2">
              <span className="text-lg text-gray-500">Filtered by:</span>
-             <span className="bg-[#B88E2F] text-white px-4 py-1 rounded-full flex items-center gap-2 text-sm font-medium animate-fadeIn">
-               {activeCategory}
-               <button onClick={onClearCategory} className="hover:bg-black/20 rounded-full p-0.5">
-                 <X size={14} />
-               </button>
-             </span>
+             {activeCategory && (
+                <span className="bg-[#B88E2F] text-white px-4 py-1 rounded-full flex items-center gap-2 text-sm font-medium animate-fadeIn">
+                  {activeCategory}
+                  <button onClick={onClearCategory} className="hover:bg-black/20 rounded-full p-0.5">
+                    <X size={14} />
+                  </button>
+                </span>
+             )}
+             {searchQuery && (
+                 <span className="bg-[#B88E2F] text-white px-4 py-1 rounded-full flex items-center gap-2 text-sm font-medium animate-fadeIn">
+                   Search: "{searchQuery}"
+                 </span>
+             )}
            </div>
         </div>
       )}
@@ -247,7 +274,7 @@ const Shop: React.FC<ShopProps> = ({ onProductClick, activeCategory, onClearCate
         {/* Pagination */}
         {totalPages > 1 && (
           <div className="flex justify-center items-center gap-4 md:gap-8 flex-wrap">
-            {/* Previous Button (Optional, but good UX) */}
+            {/* Previous Button */}
              <button 
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
@@ -260,7 +287,6 @@ const Shop: React.FC<ShopProps> = ({ onProductClick, activeCategory, onClearCate
 
             {/* Page Numbers */}
             {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
-              // Simple pagination logic to show limited range could go here, but for demo we show all
               return (
                 <button 
                   key={page}

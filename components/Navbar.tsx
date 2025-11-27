@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { User, Search, Heart, ShoppingCart, Menu } from 'lucide-react';
+import { User, Search, Heart, ShoppingCart, Menu, X } from 'lucide-react';
 
 interface NavbarProps {
   onHomeClick: () => void;
@@ -11,6 +11,7 @@ interface NavbarProps {
   onUserIconClick: () => void;
   cartCount?: number;
   isLoggedIn?: boolean;
+  onSearch?: (query: string) => void;
 }
 
 const Navbar: React.FC<NavbarProps> = ({ 
@@ -21,9 +22,12 @@ const Navbar: React.FC<NavbarProps> = ({
   onCartIconClick, 
   onUserIconClick,
   cartCount = 0,
-  isLoggedIn = false
+  isLoggedIn = false,
+  onSearch
 }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
+  const [isSearchOpen, setIsSearchOpen] = React.useState(false);
+  const [searchQuery, setSearchQuery] = React.useState('');
 
   const handleHomeClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -60,6 +64,20 @@ const Navbar: React.FC<NavbarProps> = ({
     onUserIconClick();
   }
 
+  const handleSearchSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (onSearch) {
+      onSearch(searchQuery);
+    }
+  };
+
+  const toggleSearch = () => {
+    setIsSearchOpen(!isSearchOpen);
+    if (isSearchOpen) {
+       setSearchQuery(''); // Clear when closing
+    }
+  };
+
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white h-[80px] shadow-sm">
       <div className="max-w-[1280px] mx-auto w-full h-full flex items-center justify-between px-4 md:px-8 lg:px-16">
@@ -92,7 +110,26 @@ const Navbar: React.FC<NavbarProps> = ({
           >
             <User size={24} fill={isLoggedIn ? "currentColor" : "none"} />
           </button>
-          <button className="hover:text-[#B88E2F] transition-colors"><Search size={24} /></button>
+          
+          <div className="relative flex items-center">
+             {isSearchOpen ? (
+                <form onSubmit={handleSearchSubmit} className="absolute right-0 top-1/2 -translate-y-1/2 bg-white border border-[#B88E2F] rounded-[5px] pl-4 pr-2 py-1 flex items-center shadow-lg z-20 w-[250px]">
+                    <input 
+                        type="text"
+                        placeholder="Search..."
+                        className="w-full outline-none text-sm text-black"
+                        value={searchQuery}
+                        onChange={(e) => setSearchQuery(e.target.value)}
+                        autoFocus
+                    />
+                    <button type="submit" className="text-[#B88E2F] ml-2"><Search size={18} /></button>
+                    <button type="button" onClick={toggleSearch} className="text-[#9F9F9F] ml-2 hover:text-red-500"><X size={18} /></button>
+                </form>
+             ) : (
+                <button onClick={toggleSearch} className="hover:text-[#B88E2F] transition-colors"><Search size={24} /></button>
+             )}
+          </div>
+
           <button className="hover:text-[#B88E2F] transition-colors"><Heart size={24} /></button>
           
           <div className="relative">
@@ -135,11 +172,14 @@ const Navbar: React.FC<NavbarProps> = ({
           <a href="#" onClick={handleShopClick} className="text-lg font-medium">Shop</a>
           <a href="#" onClick={handleAboutClick} className="text-lg font-medium">About</a>
           <a href="#" onClick={handleContactClick} className="text-lg font-medium">Contact</a>
-          <div className="flex gap-6 mt-4 pt-4 border-t">
+          <div className="flex gap-6 mt-4 pt-4 border-t items-center">
             <button onClick={handleUserClick}>
                <User size={24} fill={isLoggedIn ? "black" : "none"} />
             </button>
-            <Search size={24} />
+            {/* Mobile Search Toggle */}
+            <button onClick={() => { setIsMenuOpen(false); setIsSearchOpen(true); }} className="hover:text-[#B88E2F]">
+                <Search size={24} />
+            </button>
             <Heart size={24} />
           </div>
         </div>
