@@ -11,6 +11,7 @@ import ProductDetails from './components/ProductDetails';
 import About from './components/About';
 import Contact from './components/Contact';
 import CartSidebar from './components/CartSidebar';
+import WishlistSidebar from './components/WishlistSidebar';
 import LoginModal from './components/LoginModal';
 import ComparisonModal from './components/ComparisonModal';
 import { Product, CartItem } from './types';
@@ -19,7 +20,9 @@ const App: React.FC = () => {
   const [currentView, setCurrentView] = useState<'home' | 'shop' | 'product' | 'about' | 'contact'>('home');
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
+  const [wishlistItems, setWishlistItems] = useState<Product[]>([]);
   const [isCartOpen, setIsCartOpen] = useState(false);
+  const [isWishlistOpen, setIsWishlistOpen] = useState(false);
   const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
   const [isComparisonOpen, setIsComparisonOpen] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -40,10 +43,6 @@ const App: React.FC = () => {
 
   const navigateToShop = () => {
     setCurrentView('shop');
-    // We don't necessarily reset category here if they clicked "Show More", 
-    // but typically "Shop" in menu implies "All Products" unless a filter is active.
-    // Let's reset it for a clean "Shop" click, but preserve it if navigating internally.
-    // For simple menu clicks, we reset.
     setSelectedCategory(null);
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
@@ -114,15 +113,12 @@ const App: React.FC = () => {
   const handleLogin = () => {
     setIsLoggedIn(true);
     setIsLoginModalOpen(false);
-    // Optionally reopen cart if they were trying to checkout
-    // setIsCartOpen(true); 
   };
 
   const handleUserIconClick = () => {
     if (!isLoggedIn) {
       setIsLoginModalOpen(true);
     } else {
-       // Typically would open profile menu or logout option
        const confirmLogout = window.confirm("Do you want to logout?");
        if (confirmLogout) {
          setIsLoggedIn(false);
@@ -153,8 +149,26 @@ const App: React.FC = () => {
     setComparisonItems(prev => prev.filter(item => item.id !== productId));
   };
 
-  // Calculate total number of items for the badge
+  // Wishlist Logic
+  const handleToggleWishlist = (product: Product) => {
+    setWishlistItems(prev => {
+      if (prev.find(item => item.id === product.id)) {
+        return prev.filter(item => item.id !== product.id);
+      }
+      return [...prev, product];
+    });
+    // Optional: Open wishlist when adding, but maybe annoying if just toggling
+    // setIsWishlistOpen(true); 
+  };
+
+  // Check if a product is in wishlist
+  const isProductInWishlist = (productId: string) => {
+    return wishlistItems.some(item => item.id === productId);
+  };
+
+  // Calculate total number of items
   const cartCount = cartItems.reduce((acc, item) => acc + item.quantity, 0);
+  const wishlistCount = wishlistItems.length;
 
   return (
     <div className="min-h-screen bg-white text-[#333]">
@@ -165,8 +179,10 @@ const App: React.FC = () => {
         onContactClick={navigateToContact}
         onCartIconClick={() => setIsCartOpen(true)}
         onUserIconClick={handleUserIconClick}
+        onWishlistIconClick={() => setIsWishlistOpen(true)}
         onSearch={handleSearch}
         cartCount={cartCount}
+        wishlistCount={wishlistCount}
         isLoggedIn={isLoggedIn}
       />
       
@@ -177,6 +193,14 @@ const App: React.FC = () => {
         onRemoveItem={handleRemoveFromCart}
         onCheckout={handleCheckout}
         onClearCart={handleClearCart}
+      />
+
+      <WishlistSidebar 
+        isOpen={isWishlistOpen}
+        onClose={() => setIsWishlistOpen(false)}
+        wishlistItems={wishlistItems}
+        onRemoveItem={(product) => handleToggleWishlist(product)}
+        onAddToCart={(product) => handleAddToCart(product, 1)}
       />
 
       <LoginModal 
@@ -203,6 +227,8 @@ const App: React.FC = () => {
               onShowMoreClick={navigateToShop} 
               onProductClick={navigateToProduct}
               onCompareClick={handleAddToCompare}
+              onLikeClick={handleToggleWishlist}
+              wishlistItems={wishlistItems}
             />
           </>
         )}
@@ -215,6 +241,8 @@ const App: React.FC = () => {
             onSelectCategory={handleCategoryClick}
             searchQuery={searchQuery}
             onCompareClick={handleAddToCompare}
+            onLikeClick={handleToggleWishlist}
+            wishlistItems={wishlistItems}
           />
         )}
 

@@ -7,9 +7,17 @@ interface ProductCardProps {
   product: Product;
   onSeeDetails?: (product: Product) => void;
   onCompareClick?: (product: Product) => void;
+  onLikeClick?: (product: Product) => void;
+  isLiked?: boolean;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, onSeeDetails, onCompareClick }) => {
+const ProductCard: React.FC<ProductCardProps> = ({ 
+  product, 
+  onSeeDetails, 
+  onCompareClick,
+  onLikeClick,
+  isLiked = false
+}) => {
   const formatPrice = (price: number) => {
     return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(price);
   };
@@ -24,6 +32,13 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSeeDetails, onComp
     e.preventDefault();
     if (onCompareClick) {
       onCompareClick(product);
+    }
+  };
+
+  const handleLikeClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (onLikeClick) {
+      onLikeClick(product);
     }
   };
 
@@ -80,8 +95,11 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, onSeeDetails, onComp
            >
              <ArrowRightLeft size={16} /> Compare
            </button>
-           <button className="flex items-center gap-1 hover:text-[#B88E2F] transition-colors">
-             <Heart size={16} /> Like
+           <button 
+             onClick={handleLikeClick}
+             className={`flex items-center gap-1 hover:text-[#B88E2F] transition-colors ${isLiked ? 'text-[#B88E2F]' : ''}`}
+           >
+             <Heart size={16} fill={isLiked ? "currentColor" : "none"} /> Like
            </button>
          </div>
       </div>

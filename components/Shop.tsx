@@ -12,6 +12,8 @@ interface ShopProps {
   onSelectCategory?: (category: string) => void;
   searchQuery?: string;
   onCompareClick: (product: Product) => void;
+  onLikeClick: (product: Product) => void;
+  wishlistItems: Product[];
 }
 
 type SortOption = 'default' | 'price-asc' | 'price-desc' | 'name-asc';
@@ -22,7 +24,9 @@ const Shop: React.FC<ShopProps> = ({
   onClearCategory, 
   onSelectCategory, 
   searchQuery = '',
-  onCompareClick
+  onCompareClick,
+  onLikeClick,
+  wishlistItems
 }) => {
   // Config States
   const [itemsPerPage, setItemsPerPage] = useState<number>(16);
@@ -265,6 +269,8 @@ const Shop: React.FC<ShopProps> = ({
                 product={product} 
                 onSeeDetails={onProductClick}
                 onCompareClick={() => onCompareClick(product)}
+                onLikeClick={() => onLikeClick(product)}
+                isLiked={wishlistItems.some(item => item.id === product.id)}
               />
             ))}
           </div>

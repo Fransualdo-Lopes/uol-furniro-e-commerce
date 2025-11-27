@@ -9,7 +9,9 @@ interface NavbarProps {
   onContactClick: () => void;
   onCartIconClick: () => void;
   onUserIconClick: () => void;
+  onWishlistIconClick: () => void;
   cartCount?: number;
+  wishlistCount?: number;
   isLoggedIn?: boolean;
   onSearch?: (query: string) => void;
 }
@@ -21,7 +23,9 @@ const Navbar: React.FC<NavbarProps> = ({
   onContactClick, 
   onCartIconClick, 
   onUserIconClick,
+  onWishlistIconClick,
   cartCount = 0,
+  wishlistCount = 0,
   isLoggedIn = false,
   onSearch
 }) => {
@@ -59,6 +63,12 @@ const Navbar: React.FC<NavbarProps> = ({
     setIsMenuOpen(false);
   }
 
+  const handleWishlistClick = (e: React.MouseEvent<HTMLElement>) => {
+    e.preventDefault();
+    onWishlistIconClick();
+    setIsMenuOpen(false);
+  }
+
   const handleUserClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
     onUserIconClick();
@@ -87,8 +97,10 @@ const Navbar: React.FC<NavbarProps> = ({
             onClick={handleHomeClick}
             className="font-bold text-2xl lg:text-3xl font-montserrat tracking-wide text-black flex items-center gap-1 cursor-pointer"
           >
-             {/* Simulating the gold triangle logo with CSS/Text for simplicity if image not available */}
-             <span className="text-[#B88E2F] font-bold text-3xl">▲</span>
+             <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="mb-1">
+                <path d="M16 2L2 28H30L16 2Z" fill="none" stroke="#B88E2F" strokeWidth="3" />
+                <path d="M16 8L8 24H24L16 8Z" fill="#B88E2F" />
+             </svg>
              Furniro
           </span>
         </div>
@@ -130,7 +142,19 @@ const Navbar: React.FC<NavbarProps> = ({
              )}
           </div>
 
-          <button className="hover:text-[#B88E2F] transition-colors"><Heart size={24} /></button>
+          <div className="relative">
+            <button 
+              onClick={handleWishlistClick}
+              className="hover:text-[#B88E2F] transition-colors flex items-center"
+            >
+              <Heart size={24} />
+            </button>
+            {wishlistCount > 0 && (
+              <span className="absolute -top-2 -right-2 bg-[#E97171] text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full border border-white pointer-events-none">
+                {wishlistCount}
+              </span>
+            )}
+          </div>
           
           <div className="relative">
             <button 
@@ -180,7 +204,16 @@ const Navbar: React.FC<NavbarProps> = ({
             <button onClick={() => { setIsMenuOpen(false); setIsSearchOpen(true); }} className="hover:text-[#B88E2F]">
                 <Search size={24} />
             </button>
-            <Heart size={24} />
+            <div className="relative">
+              <button onClick={handleWishlistClick}>
+                <Heart size={24} />
+              </button>
+              {wishlistCount > 0 && (
+                <span className="absolute -top-2 -right-2 bg-[#E97171] text-white text-[10px] font-bold h-5 w-5 flex items-center justify-center rounded-full border border-white pointer-events-none">
+                  {wishlistCount}
+                </span>
+              )}
+            </div>
           </div>
         </div>
       )}

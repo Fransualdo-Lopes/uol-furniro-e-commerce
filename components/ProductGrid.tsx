@@ -8,9 +8,17 @@ interface ProductGridProps {
   onShowMoreClick: () => void;
   onProductClick?: (product: Product) => void;
   onCompareClick?: (product: Product) => void;
+  onLikeClick?: (product: Product) => void;
+  wishlistItems?: Product[];
 }
 
-const ProductGrid: React.FC<ProductGridProps> = ({ onShowMoreClick, onProductClick, onCompareClick }) => {
+const ProductGrid: React.FC<ProductGridProps> = ({ 
+  onShowMoreClick, 
+  onProductClick, 
+  onCompareClick,
+  onLikeClick,
+  wishlistItems = []
+}) => {
   return (
     <section id="shop" className="py-12 px-4 md:px-8 lg:px-16 max-w-[1280px] mx-auto">
       <h2 className="text-[#3A3A3A] text-[40px] font-bold text-center mb-8">Our Products</h2>
@@ -22,6 +30,8 @@ const ProductGrid: React.FC<ProductGridProps> = ({ onShowMoreClick, onProductCli
             product={product} 
             onSeeDetails={onProductClick}
             onCompareClick={onCompareClick}
+            onLikeClick={onLikeClick}
+            isLiked={wishlistItems.some(item => item.id === product.id)}
           />
         ))}
       </div>
