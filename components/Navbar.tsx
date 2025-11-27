@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { User, Search, Heart, ShoppingCart, Menu } from 'lucide-react';
 
 interface NavbarProps {
@@ -9,7 +9,6 @@ interface NavbarProps {
   onContactClick: () => void;
   onCartIconClick: () => void;
   onUserIconClick: () => void;
-  onSearch: (query: string) => void;
   cartCount?: number;
   isLoggedIn?: boolean;
 }
@@ -21,13 +20,10 @@ const Navbar: React.FC<NavbarProps> = ({
   onContactClick, 
   onCartIconClick, 
   onUserIconClick,
-  onSearch,
   cartCount = 0,
   isLoggedIn = false
 }) => {
   const [isMenuOpen, setIsMenuOpen] = React.useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
-  const [searchText, setSearchText] = useState('');
 
   const handleHomeClick = (e: React.MouseEvent<HTMLElement>) => {
     e.preventDefault();
@@ -64,15 +60,9 @@ const Navbar: React.FC<NavbarProps> = ({
     onUserIconClick();
   }
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSearch(searchText);
-    setIsSearchOpen(false);
-  };
-
   return (
     <nav className="fixed top-0 left-0 right-0 z-50 bg-white h-[80px] shadow-sm">
-      <div className="max-w-[1280px] mx-auto w-full h-full flex items-center justify-between px-4 md:px-8 lg:px-16 relative">
+      <div className="max-w-[1280px] mx-auto w-full h-full flex items-center justify-between px-4 md:px-8 lg:px-16">
         {/* Logo */}
         <div className="flex items-center gap-2">
           <span 
@@ -102,33 +92,7 @@ const Navbar: React.FC<NavbarProps> = ({
           >
             <User size={24} fill={isLoggedIn ? "currentColor" : "none"} />
           </button>
-          
-          <div className="relative">
-            <button 
-              onClick={() => setIsSearchOpen(!isSearchOpen)}
-              className={`hover:text-[#B88E2F] transition-colors ${isSearchOpen ? 'text-[#B88E2F]' : ''}`}
-            >
-              <Search size={24} />
-            </button>
-            
-            {/* Search Input Dropdown */}
-            {isSearchOpen && (
-              <div className="absolute top-full right-0 mt-4 w-[300px] bg-white shadow-xl p-4 rounded-lg border border-gray-100 animate-fadeIn z-50">
-                <form onSubmit={handleSearchSubmit} className="flex gap-2">
-                  <input
-                    type="text"
-                    placeholder="Search products..."
-                    value={searchText}
-                    onChange={(e) => setSearchText(e.target.value)}
-                    className="flex-1 border-b border-gray-300 py-1 px-2 outline-none focus:border-[#B88E2F] bg-white text-black"
-                    autoFocus
-                  />
-                  <button type="submit" className="text-[#B88E2F] font-medium text-sm">GO</button>
-                </form>
-              </div>
-            )}
-          </div>
-
+          <button className="hover:text-[#B88E2F] transition-colors"><Search size={24} /></button>
           <button className="hover:text-[#B88E2F] transition-colors"><Heart size={24} /></button>
           
           <div className="relative">
@@ -171,26 +135,11 @@ const Navbar: React.FC<NavbarProps> = ({
           <a href="#" onClick={handleShopClick} className="text-lg font-medium">Shop</a>
           <a href="#" onClick={handleAboutClick} className="text-lg font-medium">About</a>
           <a href="#" onClick={handleContactClick} className="text-lg font-medium">Contact</a>
-          <div className="flex gap-6 mt-4 pt-4 border-t items-center justify-between">
+          <div className="flex gap-6 mt-4 pt-4 border-t">
             <button onClick={handleUserClick}>
                <User size={24} fill={isLoggedIn ? "black" : "none"} />
             </button>
-            
-            {/* Mobile Search */}
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              handleSearchSubmit(e);
-              setIsMenuOpen(false);
-            }} className="flex-1 mx-4 border-b border-gray-300">
-               <input 
-                  type="text" 
-                  placeholder="Search..." 
-                  value={searchText}
-                  onChange={(e) => setSearchText(e.target.value)}
-                  className="w-full py-1 outline-none bg-white text-black"
-               />
-            </form>
-
+            <Search size={24} />
             <Heart size={24} />
           </div>
         </div>
