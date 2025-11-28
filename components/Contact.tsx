@@ -71,7 +71,7 @@ const Contact: React.FC = () => {
                 <input 
                   type="text" 
                   placeholder="Abc" 
-                  className="w-full border border-[#9F9F9F] rounded-[10px] h-[75px] px-6 text-[#9F9F9F] outline-none focus:border-[#B88E2F]"
+                  className="w-full bg-white border border-[#9F9F9F] rounded-[10px] h-[75px] px-6 text-black placeholder:text-[#9F9F9F] outline-none focus:border-[#B88E2F]"
                 />
               </div>
 
@@ -80,7 +80,7 @@ const Contact: React.FC = () => {
                 <input 
                   type="email" 
                   placeholder="Abc@def.com" 
-                  className="w-full border border-[#9F9F9F] rounded-[10px] h-[75px] px-6 text-[#9F9F9F] outline-none focus:border-[#B88E2F]"
+                  className="w-full bg-white border border-[#9F9F9F] rounded-[10px] h-[75px] px-6 text-black placeholder:text-[#9F9F9F] outline-none focus:border-[#B88E2F]"
                 />
               </div>
 
@@ -89,7 +89,7 @@ const Contact: React.FC = () => {
                 <input 
                   type="text" 
                   placeholder="This is an optional" 
-                  className="w-full border border-[#9F9F9F] rounded-[10px] h-[75px] px-6 text-[#9F9F9F] outline-none focus:border-[#B88E2F]"
+                  className="w-full bg-white border border-[#9F9F9F] rounded-[10px] h-[75px] px-6 text-black placeholder:text-[#9F9F9F] outline-none focus:border-[#B88E2F]"
                 />
               </div>
 
@@ -97,7 +97,7 @@ const Contact: React.FC = () => {
                 <label className="text-black font-medium">Message</label>
                 <textarea 
                   placeholder="Hi! I'd like to ask about" 
-                  className="w-full border border-[#9F9F9F] rounded-[10px] h-[120px] p-6 text-[#9F9F9F] outline-none focus:border-[#B88E2F] resize-none"
+                  className="w-full bg-white border border-[#9F9F9F] rounded-[10px] h-[120px] p-6 text-black placeholder:text-[#9F9F9F] outline-none focus:border-[#B88E2F] resize-none"
                 />
               </div>
 
