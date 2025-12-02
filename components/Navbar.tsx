@@ -96,11 +96,8 @@ const Navbar: React.FC<NavbarProps> = ({
             onClick={handleHomeClick}
             className="font-bold text-2xl lg:text-3xl font-montserrat tracking-wide text-black flex items-center gap-2 cursor-pointer"
           >
-             {/* Vetor SVG Geométrico Limpo */}
-             <svg width="50" height="32" viewBox="0 0 50 32" fill="none" xmlns="http://www.w3.org/2000/svg" className="h-8 w-auto">
-                <path d="M30 0H20L0 32H10L25 8L40 32H50L30 0Z" fill="#B88E2F"/>
-             </svg>
-             Furniro
+        <img src="/Logo.svg" alt="Furniro" className="h-8 w-auto" />
+          Furniro
           </span>
         </div>
 
